@@ -1,0 +1,15 @@
+code:
+  faberoh:
+    order-api:
+      version: latest
+      generators:
+        - generator: http4s_0_18
+          target: src/main/scala/com/faberoh/order/generated
+          files:
+            - '*ModelsJson.*'
+            - '*Server.*'
+        - generator: http4s_0_18
+          target: src/test/scala/com/faberoh/order/generated
+          files:
+            - '*ClientOnly.*'
+            - '*MockClient.*'

@@ -1,0 +1,8 @@
+---
+faberoh:
+  order-api:
+    http4s_0_18:
+    - src/main/scala/com/faberoh/order/generated/FaberohOrderApiV0ModelsJson.scala
+    - src/main/scala/com/faberoh/order/generated/FaberohOrderApiV0Server.scala
+    - src/test/scala/com/faberoh/order/generated/FaberohOrderApiV0ClientOnly.scala
+    - src/test/scala/com/faberoh/order/generated/FaberohOrderApiV0MockClient.scala

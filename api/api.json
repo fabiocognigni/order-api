@@ -1,0 +1,315 @@
+{
+  "name": "order-api",
+  "description": "Order API",
+  "info": {
+    "contact": {
+      "name": "Fabio Cognigni <fabio.cognigni@gmail.com>",
+      "url": "https://github.com/fabiocognigni"
+    }
+  },
+  "base_url": "http://localhost:8080",
+  "imports": [],
+  "headers": [],
+  "enums": {
+    "order_status":{
+      "description": "The processing status of an order.",
+      "values": [
+        { "name": "open" },
+        { "name": "submitted" },
+        { "name": "processed" },
+        { "name": "shipped" },
+        { "name": "cancelled" },
+        { "name": "returned" }
+      ]
+    },
+    "credit_card_brand":{
+      "description": "The credit card brands supported.",
+      "values": [
+        { "name": "visa" },
+        { "name": "mastercard" },
+        { "name": "amex" }
+      ]
+    }
+  },
+  "unions": {},
+  "models": {
+    "order": {
+      "description": "A customer order",
+      "fields":[
+        {
+          "name": "id",
+          "type": "uuid",
+          "description": "The order unique identifier.",
+          "required": true,
+          "example": "e0910d00-ff71-409a-9ad2-f8d1555176d2"
+        },
+        {
+          "name": "user",
+          "type": "user",
+          "description": "The customer info.",
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "order_status",
+          "description": "The current status of the order.",
+          "required": true,
+          "example": "shipped"
+        },
+        {
+          "name": "items",
+          "type": "[item]",
+          "description": "The items of the order.",
+          "required": true,
+          "minimum": 0,
+          "maximum": 20
+        },
+        {
+          "name": "billing_address",
+          "type": "address",
+          "description": "The billing address of the order.",
+          "required": true
+        },
+        {
+          "name": "shipping_address",
+          "type": "address",
+          "description": "The shipping address of the order.",
+          "required": true
+        },
+        {
+          "name": "credit_card",
+          "type": "credit_card",
+          "description": "The payment method used.",
+          "required": true
+        },
+        {
+          "name": "summary",
+          "type": "order_summary",
+          "description": "the order summary amounts",
+          "required": true
+        }
+      ]
+    },
+    "user": {
+      "description" : "Customer info.",
+      "fields": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "description": "The unique ID for the user.",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "description": "The customer's email address.",
+          "required": true
+        },
+        {
+          "name": "phone",
+          "type": "string",
+          "description": "The customer's phone number.",
+          "required": false
+        }
+      ]
+    },
+    "address": {
+      "description" : "An address",
+      "fields": [
+        {
+          "name": "first_name",
+          "type": "string",
+          "description": "The first name.",
+          "required": true,
+          "example": "John"
+        },
+        {
+          "name": "last_name",
+          "type": "string",
+          "description": "The last name.",
+          "required": true,
+          "example": "Doe"
+        },
+        {
+          "name": "line1",
+          "type": "string",
+          "description": "The first line of the address.",
+          "required": true,
+          "example": "19 Bowery Street"
+        },
+        {
+          "name": "line2",
+          "type": "string",
+          "description": "The second line of the address.",
+          "required": false,
+          "example": "apt 4C"
+        },
+        {
+          "name": "zip",
+          "type": "string",
+          "description": "The zip code.",
+          "required": true,
+          "maximum": 5,
+          "example": "10017"
+        },
+        {
+          "name": "city",
+          "type": "string",
+          "description": "The city name.",
+          "required": true,
+          "example": "New York"
+        },
+        {
+          "name": "state",
+          "type": "string",
+          "description": "The state name.",
+          "required": true,
+          "example": "New York"
+        },
+        {
+          "name": "country_code",
+          "type": "string",
+          "description": "The country ISO code.",
+          "required": true,
+          "example": "US"
+        }
+      ]
+    },
+    "credit_card": {
+      "description": "A credit card.",
+      "fields":[
+        {
+          "name": "number",
+          "type": "string",
+          "description": "The credit card number.",
+          "required": true,
+          "example": "4111 1111 1111 1111"
+        },
+        {
+          "name": "expiration_month",
+          "type": "integer",
+          "description": "The credit card expiration month.",
+          "required": true,
+          "minimum": 1,
+          "maximum": 12,
+          "example": "4"
+        },
+        {
+          "name": "expiration_year",
+          "type": "integer",
+          "description": "The credit card expiration year.",
+          "required": true,
+          "example": "2021"
+        },
+        {
+          "name": "security_code",
+          "type": "string",
+          "description": "The credit card security code.",
+          "required": true,
+          "example": "123"
+        },
+        {
+          "name": "brand",
+          "type": "credit_card_brand",
+          "description": "The credit card brand.",
+          "required": true,
+          "example": "visa"
+        },
+        {
+          "name": "holder_name",
+          "type": "string",
+          "description": "The credit card holder name.",
+          "required": true,
+          "example": "Fabio Cognigni"
+        }
+      ]
+    },
+    "item": {
+      "description": "An item of the order.",
+      "fields": [
+        {
+          "name": "upc",
+          "type": "string",
+          "description": "The UPC code for the product.",
+          "required": true
+        },
+        {
+          "name": "quantity",
+          "type": "integer",
+          "description": "The quantity of this item in the order.",
+          "required": true,
+          "minimum": 1,
+          "maximum": 10
+        }
+      ]
+    },
+    "order_summary": {
+      "description": "An item of the order.",
+      "fields": [
+        {
+          "name": "items_total",
+          "type": "integer",
+          "description": "The total cost of the items in the order.",
+          "required": true
+        },
+        {
+          "name": "shipping_charge",
+          "type": "integer",
+          "description": "The charge for shipping the order.",
+          "required": true
+        },
+        {
+          "name": "taxes",
+          "type": "integer",
+          "description": "The taxes amount.",
+          "required": true
+        },
+        {
+          "name": "total",
+          "type": "integer",
+          "description": "The total amount.",
+          "required": true
+        }
+      ]
+    }
+  },
+  "resources": {
+    "order": {
+      "path": "/orders",
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/:order_id",
+          "description": "Get an order by ID.",
+          "parameters": [
+            {
+              "name": "order_id",
+              "type": "uuid",
+              "location": "path",
+              "description": "The id of the order to retrieve.",
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": { "type": "order", "description": "The order found." },
+            "404": { "type": "unit", "description": "Order not found." }
+          }
+        },
+        {
+          "method": "POST",
+          "description": "Create (submit) an order.",
+          "parameters": [],
+          "body": {
+            "type": "order",
+            "required": true,
+            "description" : "The order to be submitted."
+          },
+          "responses": {
+            "201": { "type": "unit", "description": "The order has been created successfully." },
+            "400": { "type": "unit", "description": "Invalid request body." }
+          }
+        }
+      ]
+    }
+  }
+}
