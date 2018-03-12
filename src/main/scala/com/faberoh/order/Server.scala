@@ -15,9 +15,6 @@ sealed abstract class BlazeServer[F[_]: Effect] extends StreamApp[F] {
   implicit val ec = ExecutionContext.fromExecutorService(Executors.newScheduledThreadPool(threadPoolSize).asScala)
 
   override def stream(args: List[String], requestShutdown: F[Unit]): Stream[F, StreamApp.ExitCode] = {
-    val logger = getLogger("Server")
-    logger.info(s"Starting server...")
-
     BlazeBuilder[F]
       .bindHttp(8080, "localhost")
       .mountService(new OrderService[F].service)
