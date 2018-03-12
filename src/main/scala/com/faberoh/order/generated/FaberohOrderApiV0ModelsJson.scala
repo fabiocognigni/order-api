@@ -101,12 +101,10 @@ package com.faberoh.order.api.v0.models {
    * 
    * @param id The unique ID for the user.
    * @param email The customer's email address.
-   * @param phone The customer's phone number.
    */
   case class User(
     id: _root_.java.util.UUID,
-    email: String,
-    phone: String
+    email: String
   )
 
   /**
@@ -148,7 +146,7 @@ package com.faberoh.order.api.v0.models {
   }
 
   /**
-   * The processing status allowed for an order.
+   * The processing status of an order.
    */
   sealed trait OrderStatus extends _root_.scala.Product with _root_.scala.Serializable
 
@@ -386,12 +384,10 @@ package com.faberoh.order.api.v0.models {
      for {
         id <- c.downField("id").as[_root_.java.util.UUID]
         email <- c.downField("email").as[String]
-        phone <- c.downField("phone").as[String]
       } yield {
         User(
           id = id,
-          email = email,
-          phone = phone
+          email = email
         )
       }
     }
@@ -399,8 +395,7 @@ package com.faberoh.order.api.v0.models {
     implicit def encodeOrderApiUser: Encoder[User] = Encoder.instance { t =>
       Json.fromFields(Seq(
         Some("id" -> t.id.asJson),
-        Some("email" -> t.email.asJson),
-        Some("phone" -> t.phone.asJson)
+        Some("email" -> t.email.asJson)
       ).flatten)
     }
   }

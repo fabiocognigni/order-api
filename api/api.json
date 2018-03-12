@@ -104,12 +104,6 @@
           "type": "string",
           "description": "The customer's email address.",
           "required": true
-        },
-        {
-          "name": "phone",
-          "type": "string",
-          "description": "The customer's phone number.",
-          "required": false
         }
       ]
     },

@@ -5,6 +5,40 @@
  */
 package com.faberoh.order.api.v0.mock {
 
+  class Client[F[_]: cats.Applicative] extends com.faberoh.order.api.v0.interfaces.Client[F] {
+
+    val baseUrl: org.http4s.Uri = org.http4s.Uri.unsafeFromString("http://mock.localhost")
+
+    override def orders: com.faberoh.order.api.v0.Orders[F] = new MockOrders[F]
+
+  }
+
+  class MockOrders[F[_]: cats.Applicative] extends com.faberoh.order.api.v0.Orders[F] {
+
+    /**
+     * Get an order by ID.
+     * 
+     * @param orderId The id of the order to retrieve.
+     */
+    def getByOrderId(
+      orderId: _root_.java.util.UUID,
+      requestHeaders: Seq[(String, String)] = Nil
+    ): F[com.faberoh.order.api.v0.models.Order] = cats.Applicative[F].pure {
+      com.faberoh.order.api.v0.mock.Factories.makeOrder()
+    }
+
+    /**
+     * Create (submit) an order.
+     */
+    def post(
+      order: com.faberoh.order.api.v0.models.Order,
+      requestHeaders: Seq[(String, String)] = Nil
+    ): F[Unit] = cats.Applicative[F].pure {
+      // unit type
+    }
+
+  }
+
   object Factories {
 
     def randomString(): String = {
@@ -60,8 +94,7 @@ package com.faberoh.order.api.v0.mock {
 
     def makeUser(): com.faberoh.order.api.v0.models.User = com.faberoh.order.api.v0.models.User(
       id = java.util.UUID.randomUUID,
-      email = Factories.randomString(),
-      phone = Factories.randomString()
+      email = Factories.randomString()
     )
 
   }
