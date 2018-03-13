@@ -10,11 +10,11 @@ import com.faberoh.order.api.v0.models.Order
 
 final class OrderService[F[_]: Effect](implicit F: Applicative[F]) extends OrderRoutes[F] {
 
-  def getByOrderId(req: Request[F], orderId: UUID): F[GetByOrderIdResponse] = {
+  override def getByOrderId(req: Request[F], orderId: UUID): F[GetByOrderIdResponse] = {
     F.pure(GetByOrderIdResponse.HTTP404())
   }
 
-  def post(req: Request[F], body: => DecodeResult[F, Order]): F[PostResponse] = {
+  override def post(req: Request[F], body: => DecodeResult[F, Order]): F[PostResponse] = {
     F.pure(PostResponse.HTTP201())
   }
 
