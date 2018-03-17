@@ -76,14 +76,14 @@ trait OrderRoutes[F[_]] extends Matchers[F] {
   def service()(implicit sync: Sync[F]) = org.http4s.HttpService[F] {
     case _req @ GET -> Root / "orders" / UUIDVal(order_id) if apiVersionMatch(_req) =>
       getByOrderId(_req, order_id).flatMap {
-        case GetByOrderIdResponse.HTTP200(value, headers) => Ok(value).map(_.putHeaders(headers: _*))
-        case GetByOrderIdResponse.HTTP404(headers) => NotFound().map(_.putHeaders(headers: _*))
+        case GetByOrderIdResponse.HTTP200(value, headers) => Ok(value, headers: _*)
+        case GetByOrderIdResponse.HTTP404(headers) => NotFound(headers: _*)
       }
 
     case _req @ POST -> Root / "orders" if apiVersionMatch(_req) =>
       post(_req, _req.attemptAs[com.faberoh.order.api.v0.models.Order]).flatMap {
-        case PostResponse.HTTP201(headers) => Created().map(_.putHeaders(headers: _*))
-        case PostResponse.HTTP400(headers) => BadRequest().map(_.putHeaders(headers: _*))
+        case PostResponse.HTTP201(headers) => Created(headers: _*)
+        case PostResponse.HTTP400(headers) => BadRequest(headers: _*)
       }
   }
 }
